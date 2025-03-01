@@ -11,7 +11,7 @@ This project provides a machine learning model to predict breast cancer diagnosi
 - Feature importance analysis
 - Color-coded Excel output for easy interpretation of results
 - Visualization of model performance
-- Contains demo data from https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data
+- Contains data from https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data
 
 ## Installation
 
