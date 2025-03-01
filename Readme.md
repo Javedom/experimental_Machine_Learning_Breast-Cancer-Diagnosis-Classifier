@@ -11,6 +11,8 @@ This project provides a machine learning model to predict breast cancer diagnosi
 - Feature importance analysis
 - Color-coded Excel output for easy interpretation of results
 - Visualization of model performance
+- **Automatic model reuse** - tries to use a saved model first before training a new one
+- Robust error handling with graceful fallbacks
 - Contains data from https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data
 
 ## Installation
@@ -40,6 +42,24 @@ The classifier works with two types of datasets:
 
 ### Running the Classifier
 
+#### Smart Model Reuse (Default Behavior)
+By default, the classifier first checks for a saved model and uses it if available. If no model is found, it automatically trains a new one:
+
+```
+python breast_cancer_classifier.py
+```
+
+#### Command Line Arguments
+
+The classifier supports the following command line arguments:
+
+```
+--train TRAIN_FILE    Base name of training data file (without extension)
+--predict PREDICT_FILE Base name of prediction data file (without extension)
+--model MODEL_FILE    Path to saved model file
+--force-train         Force training a new model even if a saved model exists
+```
+
 #### Using Default File Names
 Place your files in the project directory with these names:
 - `training_data.csv` or `training_data.xlsx` (for training data)
@@ -50,15 +70,32 @@ Then run:
 python breast_cancer_classifier.py
 ```
 
-#### Using Custom File Names
+#### Using Custom File Names (Legacy Method)
 ```
 python breast_cancer_classifier.py my_training_data new_samples
 ```
 Note: Don't include file extensions - the program will check for both .csv and .xlsx versions.
 
-### Example
+#### Examples
+
+Use a saved model with default filenames:
 ```
-python breast_cancer_classifier.py wdbc_training wdbc_new_cases
+python breast_cancer_classifier.py
+```
+
+Force training a new model:
+```
+python breast_cancer_classifier.py --force-train
+```
+
+Use a saved model with custom prediction data:
+```
+python breast_cancer_classifier.py --predict new_samples
+```
+
+Use custom files and model path:
+```
+python breast_cancer_classifier.py --train wdbc_training --predict wdbc_new_cases --model custom_model.pkl
 ```
 
 ## Output Files
@@ -76,7 +113,7 @@ The classifier generates the following outputs:
 
 3. **breast_cancer_model.pkl**:
    - Saved model file with all components needed for prediction
-   - Can be loaded for future use without retraining
+   - Automatically used for future predictions unless --force-train is specified
 
 4. **Visualization files**:
    - `confusion_matrix.png`: Visual representation of classification performance
@@ -125,6 +162,14 @@ The model performs hyperparameter optimization through:
 
 The best model from these two approaches is selected for the final prediction.
 
+### Model Reuse Workflow
+The program follows this workflow:
+1. Check if a saved model exists
+2. If found and not overridden by --force-train, try to load it
+3. If loaded successfully, use it for predictions
+4. If no model exists or loading fails, train a new model
+5. Save the newly trained model for future use
+
 ### Evaluation Metrics
 - Accuracy
 - Precision
@@ -132,6 +177,13 @@ The best model from these two approaches is selected for the final prediction.
 - F1 Score
 - ROC AUC
 - Confusion Matrix
+
+## Error Handling
+The program includes robust error handling to manage common issues:
+- Missing files
+- Incompatible data formats
+- Missing features
+- Excel formatting issues (falls back to CSV)
 
 ## License
 CC0
