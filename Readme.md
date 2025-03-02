@@ -45,10 +45,6 @@ The classifier works with two types of datasets:
 #### Smart Model Reuse (Default Behavior)
 By default, the classifier first checks for a saved model and uses it if available. If no model is found, it automatically trains a new one:
 
-```
-python RandomForestClassifier.py
-```
-
 #### Command Line Arguments
 
 The classifier supports the following command line arguments:
