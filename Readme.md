@@ -46,7 +46,7 @@ The classifier works with two types of datasets:
 By default, the classifier first checks for a saved model and uses it if available. If no model is found, it automatically trains a new one:
 
 ```
-python breast_cancer_classifier.py
+python RandomForestClassifier.py
 ```
 
 #### Command Line Arguments
